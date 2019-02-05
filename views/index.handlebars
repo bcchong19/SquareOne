@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-          crossOrigin="anonymous" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <title>Home</title>
-  </head>
-  <body>
-    <div id="root" style="text-align: center">
-      <h1 style="margin-bottom: 20vh; margin-top: 10vh">SquareOne</h1>
-      <select style="margin-bottom: 30vh">
+
+<head>
+  <meta charset="utf-8">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+    crossOrigin="anonymous" />
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <title>Home</title>
+</head>
+
+<body>
+  <div id="root" style="text-align: center;font-size: 2em; font-family:Arial, Helvetica, sans-serif">
+    <h1 style="margin-bottom: 15vh; margin-top: 10vh">SquareOne</h1>
+    <div class="container">
+      <select style="margin-bottom: 20vh;width: 10em">
         <option value="" selected disabled hidden>Choose a map</option>
         <option value="football">Football</option>
         <option value="ice_hockey">Ice Hockey</option>
         <option value="baseball">Baseball</option>
         <option value="add_map">+ Add Map</option>
       </select>
-      <div>      
-        <button type="button" style="height: 5em;width: 10em;margin-bottom: 6vh">Get Started</button>
-      </div>
-      <div>
-        <label>        
-          <button type="button" style="height: 2em;width: 5em">Settings</button>
-        </label>
-        <label style="padding-left:3em">        
-          <button type="button" style="height: 2em;width: 5em">Logout</button>
-        </label>
-      </div>
     </div>
-  </body>
+    <div>
+      <button type="button" style="height: 3em;width: 6em;margin-bottom: 6vh">Get Started</button>
+    </div>
+    <div>
+      <label>
+        <button type="button" style="height: 2em;width: 4em">Settings</button>
+      </label>
+      <label style="padding-left:1em">
+        <button type="button" style="height: 2em;width: 4em">Logout</button>
+      </label>
+    </div>
+  </div>
+</body>
+
 </html>
