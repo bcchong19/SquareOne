@@ -1,10 +1,10 @@
 {
-  "name": "IntroHCI",
+  "name": "SquareOne",
   "version": "0.0.1",
-  "author": "Intro HCI Staff",
+  "author": "Danny Fung",
   "repository": {
     "type": "git",
-    "url": "https://github.com/IntroHCI/lab4"
+    "url": "https://github.com/DannyFung97/SquareOne"
   },
   "license": "MIT",
   "private": true,
