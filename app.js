@@ -1,14 +1,15 @@
-
 /**
  * Module dependencies.
  */
-
 var express = require('express');
 var http = require('http');
 var path = require('path');
 var handlebars = require('express3-handlebars')
 
 var index = require('./routes/index');
+var settings = require('./routes/settings');
+var logIn = require('./routes/logIn')
+
 // Example route
 // var user = require('./routes/user');
 
@@ -35,6 +36,8 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', index.view);
+app.get('/settings', settings.view);
+app.get('/logIn', logIn.view);
 // Example route
 // app.get('/users', user.list);
 
