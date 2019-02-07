@@ -1,21 +1,31 @@
-#container{
-	padding-top: 5px;
+#topButtons{
+	top: 5px;
+	width: 100%;
+	height:20px;
+	position: fixed;
 }
 
 #backButton{
-	float: left;	
+	float: left;
+		
 }
 
 #saveButton{
 	float: right;
+	
 }
 
+#playButton{
+	
+}
+
+
 #bottomButtons{
-	bottom: 0;
 	width: 100%;
 	height: 20px;
-	position: absolute;
+	position: fixed;
 	bottom: 10px;
+
 
 }
 
