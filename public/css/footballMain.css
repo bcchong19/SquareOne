@@ -1,6 +1,6 @@
 #topButtons{
 	width: 100%;
-	height:20px;
+	height: 20px;
 	position: fixed;
 }
 
@@ -21,7 +21,7 @@
 #playButton{
 	padding: 0;
 	border: none;
-	background: none;
+	background: white;
 }
 
 
