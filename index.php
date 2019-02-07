@@ -1,1 +1,1 @@
-<?php header( 'Location: ./views/index.html' ) ; ?>
+<?php include_once("./views/index.html"); ?>
