@@ -8,7 +8,7 @@ var handlebars = require('express3-handlebars')
 
 var index = require('./routes/index');
 var settings = require('./routes/settings');
-var logIn = require('./routes/logIn');
+var login = require('./routes/login');
 var footballMain = require('./routes/footballMain');
 
 // Example route
@@ -30,7 +30,7 @@ app.use(express.cookieParser('IxD secret key'));
 app.use(express.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'img')));
+app.use(express.static('/img'));
 
 // development only
 if ('development' == app.get('env')) {
@@ -39,7 +39,7 @@ if ('development' == app.get('env')) {
 
 app.get('/', index.view);
 app.get('/settings', settings.view);
-app.get('/logIn', logIn.view);
+app.get('/login', login.view);
 app.get('/footballMain', footballMain.view);
 // Example route
 // app.get('/users', user.list);

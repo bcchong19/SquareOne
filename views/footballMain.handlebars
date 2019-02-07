@@ -27,7 +27,7 @@
         <option value="default">Default</option>
       </select> 
       <button id="playButton" type="button"><img src="../img/playButton.png" height="25px" width="25px"></button>
-      <button id="saveButton" type="button"><img src="../img/saveButton.jpg" height="25px" width="25px"></button> 
+      <button id="saveButton" type="button" onclick="saveWindow()"><img src="../img/saveButton.jpg" height="25px" width="25px"></button> 
     </div>
     
     <div id="field" style="text-align:center">
@@ -40,7 +40,11 @@
       <button id="upButton" type="button"><img src="../img/upArrow.png" height="25px" width="25px"></button>
       <button id="undoButton" type="button"><img src="../img/undoButton.svg" height="25px" width="25px"></button>
     </div>
-  
+    <script>
+      function saveWindow(){
+        confirm("Do you wish to save?");
+      }
+    </script>
   </body>
 
 </html>
