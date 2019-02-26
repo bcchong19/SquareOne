@@ -1,26 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-          crossOrigin="anonymous" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <title>Settings</title>
-  </head>
-  <body>
-    <div id="root" style="text-align: center">
-      <h1 style="margin-bottom: 20vh; margin-top: 10vh">This will be the Settings Page</h1>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossOrigin="anonymous" />
+  <link rel="stylesheet" href="css/settings.css">
+  <script src="js/analytics.js"></script>
+  <title>Settings</title>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-135010880-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+</head>
+
+<body>
+
+  <div id="root" style="font-size: 2em;text-align: center; font-family:Arial, Helvetica, sans-serif">
+    <h1 style="margin-bottom: 2vh; margin-top: 4vh">Settings</h1>
+    <form action="./updateSettings">
+      <div id="username">
+        <label>Username:</label><br>
+        {{#each users}}
+        <input type="text" name="username" value="{{username}}"
+          style="padding-left: 10px;width: 10em;border-radius: 4px; border: 1px solid black;"><br>
+        {{/each}}
+      </div>
+
+      <div id="password">
+        <label>Password:</label><br>
+        {{#each users}}
+        <input type="password" name="password" value="{{password}}"
+          style="padding-left: 10px;width: 10em;border-radius: 4px; border: 1px solid black;"><br>
+        {{/each}}
+      </div>
+      <br>
+      <div id="preferences">
+        <h3>Preferences</h3>
+        <div>
+          {{#each users}}
+          {{#each preferences}}
+          <input type="checkbox" id="{{sport}}" name="{{sport}}" value="{{check}}" {{check}}>
+          <label for="{{sport}}">{{sport}}</label>
+          {{/each}}
+          {{/each}}
+        </div>
+      </div>
+      <br>
+      <input class="button" type="submit" value="Change"
+        style="height: 2em;width: 5em;margin-bottom: 1vh; background-color: #ff1e07; color: white; text-decoration: none; border-radius: 4px; border: 1px solid black; cursor: pointer;"><br><br>
+    </form>
+
+    <div id="backButton">
+      <label>
+        <button class="button " type="button"
+          style="height: 2em;width: 3em;margin-bottom: 2vh; background-color: white; text-decoration: none; border-radius: 4px; border: 1px solid black; cursor: pointer;"
+          onclick="window.location.href='/home'">Back</button>
+      </label>
     </div>
-    <div style="text-align: center"
-    <label>
-        <button type="button" style="height: 5em;width: 10em" onclick="window.location.href='/'">Back</button>
-    </label>
-  </body>
+  </div>
+
+
+</body>
+
 </html>

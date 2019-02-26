@@ -1,0 +1,40 @@
+.button {
+    position: relative;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    overflow: hidden;
+    transition: 0.3s;
+  }
+
+  input[type=checkbox] + label {
+    display: block;
+    cursor: pointer;
+  }
+  
+  input[type=checkbox] {
+    display: none;
+  }
+  
+  input[type=checkbox] + label:before {
+    content: "\2714";
+    border: 0.1em solid #000;
+    border-radius: 0.2em;
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    padding-left: .0em;
+    margin-right: 0.2em;
+    vertical-align: bottom;
+    color: transparent;
+    transition: .2s;
+  }
+  
+  input[type=checkbox] + label:active:before {
+    transform: scale(0);
+  }
+  
+  input[type=checkbox]:checked + label:before {
+    background-color: #ff1e07;
+    border-color: #ff1e07;
+    color: #fff;
+  }

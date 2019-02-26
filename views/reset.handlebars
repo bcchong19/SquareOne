@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossOrigin="anonymous" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <title>Sign Up</title>
+    <script src="js/analytics.js"></script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-135010880-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+</head>
+
+<body>
+    <div id="root" style="text-align: center">
+        <h1 style="margin-bottom: 20vh; margin-top: 10vh">Recover Password</h1>
+        <div id="form">
+            <form style="font-size: 2em">
+                <div style="margin-bottom: 5vh">
+                    <input style="width: 90vw; max-width: 300px" type="text" name="email"
+                        placeholder="Enter new password"><br>
+                    <input style="width: 90vw; max-width: 300px" type="text" name="email"
+                        placeholder="Verify password"><br>
+                </div>
+                <button onclick="window.location.href='/'" style="margin-bottom: 2vh" type="button">Enter</button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

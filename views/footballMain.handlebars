@@ -1,50 +1,513 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="theme-color" content="#000000">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-          integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
-          crossOrigin="anonymous" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link href="css/footballMain.css" rel="stylesheet">
 
-  </head>
-  
-  <body>
-    <div id="topButtons" style="text-align: center">      
-      <button id="backButton" type="button" onclick="window.location.href='/'"><img src="img/backButton.png" height="25px" width="25px"></button>
-      <select>
-        <option value="" selected disabled hidden>Choose Playbook</option>
-        <option value="playoff">Playoff</option>
-      </select>
-      <select>
-        <option value="" selected disabled hidden>Choose Play</option>
-        <option value="default">Default</option>
-      </select> 
-      <button id="playButton" type="button"><img src="img/playButton.png" height="25px" width="25px"></button>
-      <button id="saveButton" type="button" onclick="saveWindow()"><img src="img/saveButton.jpg" height="25px" width="25px"></button> 
-    </div>
-    
-    <div id="field" style="text-align:center">
-      <img src="img/footballField.png" style="width: 100vw">
-    </div>
-    
-    
-    <div id="bottomButtons" style="text-align: center">  
-      <button id="eraseButton" type="button"><img src="img/eraserButton.png" height="25px" width="25px"></button>
-      <button id="upButton" type="button"><img src="img/upArrow.png" height="25px" width="25px"></button>
-      <button id="undoButton" type="button"><img src="img/undoButton.svg" height="25px" width="25px"></button>
-    </div>
-    <script>
-      function saveWindow(){
-        confirm("Do you wish to save?");
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut Icon0" href="%PUBLIC_URL%/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+    integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossOrigin="anonymous" />
+  <link href="css/footballMain.css" rel="stylesheet">
+  <script src="http://code.jquery.com/jquery.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.8.17/jquery-ui.min.js"></script>
+  <script src="js/analytics.js"></script>
+  <style type="text/css">
+    #myCanvas {
+      background-image: "img/footballField.jpg";
+      background-size: 100% 100%;
+      background-position: center;
+    }
+  </style>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-135010880-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  <script type="text/javascript">
+    function zoomOutMobile() {
+      var viewport = document.querySelector('meta[name="viewport"]');
+
+      if ( viewport ) {
+        viewport.content = "initial-scale=1";
+        viewport.content = "width=device-width";
       }
+    }
+
+    zoomOutMobile();
+  </script>
+</head>
+
+<body onload="InitThis()">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+  <div id="topButtons" style="text-align: center; z-index: 9999">
+    <button id="backButton" type="button" onclick="window.location.href='/home'"><img src="img/backButton.png"
+        height="55px" width="55px"></button>
+    <select id="playbook" name="playbook" onchange="getPlays()"
+      style="background-color: white; text-decoration: none; border-radius: 4px; border: 1px solid black;">
+      <option value="" selected disabled hidden>Select Playbook</option>
+      {{#each users}}
+      {{#each playbooks}}
+      <option value="{{name}}">{{name}}</option>
+      {{/each}}
+      {{/each}}
+    </select>
+    <select id="play" name="play"
+      style="background-color: white; text-decoration: none; border-radius: 4px; border: 1px solid black;">
+      <option value="" selected disabled hidden>Select Play</option>
+    </select>
+
+    <script type="text/javascript">
+      var $playbook = $('#playbook'),
+        $play = $('#play'),
+        $options = $play.find('option');
+
+      $playbook.on('change', function () {
+        $play.html($options.filter('[value="' + this.value + '"]'));
+      }).trigger('change');
+
+
+
+      function getPlays() {
+        $.getJSON('user.json', function (data) {
+          $.each(data.users, function (i, user) {
+            $.each(user.playbooks, function (j, playbook) {
+              $.each(playbook.plays, function (k, play) {
+                $("#play").append($("<option/>", {
+                  value: playbook.name,
+                  text: play.name
+                }));
+              });
+            });
+          });
+        }).error(function () {
+          console.log('error');
+        });
+
+      }           
     </script>
-  </body>
+
+
+    <button id="playButton" type="button" onclick="playWindow()"><img src="img/playButton.png" height="55px"
+        width="55px"></button>
+    <button id="saveButton" type="button" onclick="saveWindow()"><img src="img/saveButton.jpg" height="55px"
+        width="55px"></button>
+  </div>
+
+  <div id="container" style="text-align:center" style="position: relative">
+    <div id="field">
+      <div align="center">
+        <canvas id="myCanvas" width="440vw" height="800vh" style="border:2px solid black"></canvas>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    var mousePressed = false;
+    var lastX, lastY;
+    var ctx;
+    var user_index = "";
+    var playbook_index = "";
+    var play_index = "";
+    var canDraw = false;
+
+    function spawnPlayers() {
+      $.getJSON('user.json', function (data) {
+        console.log(data.users[0]);
+        console.log("spawn: " + data.users[0].logged);
+        $.each(data.users, function (i, user) {
+          if (user.logged == "true" && user.preferences[0].check == "checked") {
+            user_index = i;
+            $.each(user.playbooks, function (j, playbook) {
+              if (playbook.selected == "true") {
+                playbook_index = j;
+                $.each(playbook.plays, function (k, play) {
+                  if (play.selected == "true") {
+                    play_index = k;
+                    $.each(play.positions, function (l, position) {
+                      $("#field").append('<div class="player" id="player' + l + '" onclick="dragElement(this)" ontouchstart="dragElementTouch(this)" style="position: absolute;z-index: 9; top: ' + position.top + '; left: ' + position.left + '"><img src="img/circle.png" style="width:25px; height:25px; background: ' + position.color + '; border-radius:12.5px"><div style="color: white; transform: translate(0, -100%)">' + position.num + '</div></div>');
+                      dragElement(document.getElementById("player" + l));
+                      dragElementTouch(document.getElementById("player" + l));
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }).error(function () {
+        console.log('error');
+      });
+    }
+
+    function savePlay(n) {
+      var newPlay = {};
+      newPlay = {
+        name: "",
+        selected: "true",
+        imgsrc: "",
+        positions: []
+      }
+
+      var c = document.getElementById('myCanvas');
+      if (c) {
+        var dataURL = c.toDataURL('image/jpg');
+        newPlay.imgsrc = dataURL;
+      }
+
+      newPlay.name = n;
+
+      for (var i = 0; i <= 21; i++) {
+        var pos = $("#player" + i).position();
+        var p = {
+          top: "",
+          left: "",
+          color: ""
+        }
+        p.top = pos.top;
+        p.left = pos.left;
+        if (i > 10) {
+          p.color = "blue";
+        }
+        else {
+          p.color = "red";
+        }
+        newPlay.positions.push(p);
+      }
+
+
+
+      $.getJSON('user.json', function (data) {
+        console.log(data.users[user_index].playbooks[playbook_index].plays.length);
+        var newArr = data.users[user_index].playbooks[playbook_index].plays;
+        newArr.push(newPlay);
+        data.users[user_index].playbooks[playbook_index].plays = newArr;
+        console.log(data.users[user_index].playbooks[playbook_index].plays.length);
+
+      });
+    }
+
+    function InitThis() {
+      spawnPlayers();
+
+      ctx = document.getElementById('myCanvas').getContext("2d");
+
+      $('#myCanvas').mousedown(function (e) {
+        //console.log("mouse Started drawing");
+        mousePressed = true;
+        Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false);
+      });
+
+      $('#myCanvas').mousemove(function (e) {
+        //console.log("mouse Moving");
+        if (mousePressed) {
+          Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, true);
+        }
+      });
+
+      $('#myCanvas').mouseup(function (e) {
+        if (mousePressed) {
+          //console.log("mouse drawing ended");
+          mousePressed = false;
+          cPush();
+        }
+      });
+      $('#myCanvas').mouseleave(function (e) {
+        if (mousePressed) {
+          //console.log("mouse left");
+          mousePressed = false;
+          cPush();
+        }
+      });
+
+      $('#myCanvas').on('touchstart', function (e) {
+        //console.log("Started drawing");
+        mousePressed = true;
+        Draw(e.originalEvent.changedTouches[0].pageX - $(this).offset().left, e.originalEvent.changedTouches[0].pageY - $(this).offset().top, false);
+      });
+
+      $('#myCanvas').on('touchmove', function (e) {
+        //console.log("Moving fing");
+        if (mousePressed) {
+          Draw(e.originalEvent.changedTouches[0].pageX - $(this).offset().left, e.originalEvent.changedTouches[0].pageY - $(this).offset().top, true);
+        }
+      });
+
+      $('#myCanvas').on('touchend', function (e) {
+        //console.log("drawing ended");
+        mousePressed = false;
+        cPush();
+      });
+      $('#myCanvas').on('touchcancel', function (e) {
+        mousePressed = false;
+        cPush();
+      });
+
+      $.getJSON('user.json', function (data) {
+        console.log("user_index: "+user_index);
+        console.log("playbook_index: "+playbook_index);
+        console.log("play_index: "+play_index);
+
+        drawImage(data.users[user_index].playbooks[playbook_index].plays[play_index].imgsrc);
+      }).error(function () {
+        console.log('error');
+      });
+    }
+
+    function drawImage(imgsrc) {
+      var image = new Image();
+      console.log(imgsrc);
+      image.src = imgsrc;
+      $(image).load(function () {
+        ctx.drawImage(image, 0, 0, 450, 800);
+        cPush();
+      });
+    }
+
+    function setCanDraw() {
+      canDraw = !canDraw;
+      if (!canDraw) {
+        document.getElementById("drawButton").setAttribute("style", "filter: saturate(1);");
+      }
+      else {
+        document.getElementById("drawButton").setAttribute("style", "filter: saturate(3);");
+      }
+    }
+
+    function Draw(x, y, isDown, e) {
+      if (isDown && canDraw) {
+        e = e || window.event;
+        e.preventDefault();
+        ctx.beginPath();
+        ctx.strokeStyle = $('#selColor').val();
+        ctx.lineWidth = $('#selWidth').val();
+        ctx.lineJoin = "round";
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(x, y);
+        ctx.closePath();
+        ctx.stroke();
+      }
+      lastX = x; lastY = y;
+    }
+
+    function clearArea() {
+      // Use the identity matrix while clearing the canvas
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    }
+
+    var cPushArray = new Array();
+    var cStep = -1;
+
+    function cPush() {
+      //console.log("Pushed");
+      cStep++;
+      if (cStep < cPushArray.length) { cPushArray.length = cStep; }
+      cPushArray.push(document.getElementById('myCanvas').toDataURL());
+      //document.title = cStep + ":" + cPushArray.length;
+    }
+
+    function cUndo() {
+      //console.log("Undo");
+      if (cStep > 0) {
+        cStep--;
+        var canvasPic = new Image();
+        canvasPic.src = cPushArray[cStep];
+        canvasPic.onload = function () { ctx.drawImage(canvasPic, 0, 0); }
+        //document.title = cStep + ":" + cPushArray.length;
+      }
+    }
+
+    function cRedo() {
+      //console.log("redo");
+      if (cStep < cPushArray.length - 1) {
+        cStep++;
+        var canvasPic = new Image();
+        canvasPic.src = cPushArray[cStep];
+        canvasPic.onload = function () { ctx.drawImage(canvasPic, 0, 0); }
+        //document.title = cStep + ":" + cPushArray.length;
+      }
+    }
+
+    function dragElement(elmnt) {
+      console.log("Able to now drag element " + elmnt.id);
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      if (document.getElementById(elmnt.id)) {
+        /* if present, the header is where you move the DIV from:*/
+        document.getElementById(elmnt.id).onmousedown = dragMouseDown;
+      } else {
+        /* otherwise, move the DIV from anywhere inside the DIV:*/
+        elmnt.onmousedown = dragMouseDown;
+      }
+
+      function dragMouseDown(e) {
+        console.log("Moving element " + elmnt.id);
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
+
+      function elementDrag(e) {
+        if (!canDraw) {
+          console.log("Dragging mouse")
+          e = e || window.event;
+          e.preventDefault();
+          // calculate the new cursor position:
+          pos1 = pos3 - e.clientX;
+          pos2 = pos4 - e.clientY;
+          pos3 = e.clientX;
+          pos4 = e.clientY;
+          // set the element's new position:
+          elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+          elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        }
+      }
+
+      function closeDragElement() {
+        /* stop moving when mouse button is released:*/
+        console.log("Element let go mouse");
+        document.onmouseup = null;
+        document.onmousemove = null;
+        document.onmousedown = null;
+      }
+    }
+
+    function dragElementTouch(elmnt) {
+      console.log(elmnt.id + ", touch");
+      var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      if (document.getElementById(elmnt.id)) {
+        /* if present, the header is where you move the DIV from:*/
+        document.getElementById(elmnt.id).ontouchstart = dragMouseDownTouch;
+      } else {
+        /* otherwise, move the DIV from anywhere inside the DIV:*/
+        elmnt.ontouchstart = dragMouseDownTouch;
+      }
+
+      function dragMouseDownTouch(e) {
+        console.log(elmnt.id + ", drag");
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.touches[0].clientX;
+        pos4 = e.touches[0].clientY;
+        document.ontouchend = closeDragElementTouch;
+        // call a function whenever the cursor moves:
+        document.ontouchmove = elementDragTouch;
+      }
+
+      function elementDragTouch(e) {
+        if (!canDraw) {
+          console.log(elmnt.id + ", new");
+          e = e || window.event;
+          e.preventDefault();
+          // set the element's new position:
+          elmnt.style.top = (e.touches[0].pageY - 12.5) + "px";
+          elmnt.style.left = (e.touches[0].pageX - 12.5) + "px";
+          if (elmnt.style.top > e.touches[0].clientY) {
+            elmnt.style.top = e.touches[0].clientY;
+          }
+          if (elmnt.style.left > e.touches[0].clientX) {
+            elmnt.style.left = e.touches[0].clientX;
+          }
+          if (elmnt.style.top < 0) {
+            elmnt.style.top = 0;
+          }
+          if (elmnt.style.left < 0) {
+            elmnt.style.top = 0;
+          }
+        }
+      }
+
+      function closeDragElementTouch() {
+        /* stop moving when mouse button is released:*/
+        console.log("Element let go touch");
+        document.touchend = null;
+        document.ontouchmove = null;
+        document.ontouchstart = null;
+      }
+    }
+  </script>
+
+  <div id="bottomButtons" style="text-align: center; z-index: 9999">
+    <button id="redoButton" onclick="cRedo()" type="button"><img src="img/redoButton.png" height="55px"
+        width="55px"></button>
+    <button id="undoButton" onclick="cUndo()" type="button"><img src="img/undoButton.png" height="55px"
+        width="55px"></button>
+    <button id="drawButton" type="button" onclick="setCanDraw()"><img src="img/pencil.jpg" height="55px"
+        width="55px"></button>
+    <select id="selColor"
+      style="background-color: white; text-decoration: none; border-radius: 4px; border: 1px solid black;">
+      <option value="black">black</option>
+      <option value="blue">blue</option>
+      <option value="red">red</option>
+      <option value="green">green</option>
+      <option value="yellow" selected="selected">yellow</option>
+      <option value="gray">gray</option>
+    </select>
+    <select id="selWidth"
+      style="background-color: white; text-decoration: none; border-radius: 4px; border: 1px solid black;">
+      <option value="1">1</option>
+      <option value="3">3</option>
+      <option value="5">5</option>
+      <option value="7">7</option>
+      <option value="9" selected="selected">9</option>
+      <option value="11">11</option>
+    </select>
+  </div>
+
+  <script>
+    function saveWindow() {
+      $.getJSON('user.json', function (data) {
+        var c = confirm("Do you wish to save?");
+        if (c) {
+          var next = data.users[user_index].playbooks[playbook_index].plays.length + 1;
+          var n = prompt("Please enter a name for this play", "Play_" + next);
+          if (!data.users[user_index].playbooks[playbook_index].plays.includes(n)) {
+            savePlay(n);
+          }
+          else {
+            alert("A play with that name exists already, please try another.");
+          }
+        }
+      });
+    }
+
+    function eraserWindow() {
+      confirm("Placeholder for eraser functionality");
+    }
+  </script>
+  <script>
+    function playWindow() {
+      confirm("Placeholder for play button functionality");
+    }
+  </script>
+  <script>
+    function drawWindow() {
+      confirm("Placeholder for draw button use");
+    }
+  </script>
+  <script>
+    function openUp() {
+      document.getElementById("collapsible").style.display = "block";
+    }
+
+    function closeUp() {
+      document.getElementById("collapsible").style.display = "none";
+    }
+  </script>
+  <script src="/js/footballFetch.js"></script>
+</body>
 
 </html>
